@@ -1,30 +1,26 @@
 package com.flany.paging
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.flany.paging.adapter.RepositoryAdapter
+import com.flany.paging.base.BaseActivity
 import com.flany.paging.vm.RepositoryViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private val adapter = RepositoryAdapter()
 
-    private val viewModel by lazy {
-        ViewModelProvider(
+    override val viewModel: RepositoryViewModel
+        get() = ViewModelProvider(
             this,
             ViewModelProvider.NewInstanceFactory()
         ).get(RepositoryViewModel::class.java)
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun initViews() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -33,5 +29,9 @@ class MainActivity : AppCompatActivity() {
                 adapter.submitData(it)
             }
         }
+    }
+
+    override fun getLayoutId(): Int {
+        return R.layout.activity_main
     }
 }
